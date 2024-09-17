@@ -20,22 +20,22 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public EmployeeDto createEmployee(EmployeeDto employeeDto) {
-        Employee employee = EmployeeMapper.mapToEmployee(employeeDto);
+        Employee employee = EmployeeMapper.INSTANCE.dtoToEmployee(employeeDto);
         Employee savedEmployee = employeeRepository.save(employee);
 
-        return EmployeeMapper.mapToEmployeeDto(savedEmployee);
+        return EmployeeMapper.INSTANCE.toEmployeeDto(savedEmployee);
     }
 
     @Override
     public EmployeeDto getEmployeeById(Long employeeId) {
         Employee employee = employeeRepository.findById(employeeId).orElseThrow(() -> new ResourseNotFoundException("Employee does not exist for the given id: " + employeeId));
-        return EmployeeMapper.mapToEmployeeDto(employee);
+        return EmployeeMapper.INSTANCE.toEmployeeDto(employee);
     }
 
     @Override
     public List<EmployeeDto> getAllEmployees() {
         List<Employee> employees = employeeRepository.findAll();
-        return employees.stream().map((employee) -> EmployeeMapper.mapToEmployeeDto(employee)).collect(Collectors.toList());
+        return employees.stream().map(EmployeeMapper.INSTANCE::toEmployeeDto).collect(Collectors.toList());
     }
 
     @Override
@@ -48,7 +48,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         employee.setLastName(updatedEmployee.getLastName());
         employee.setEmail(updatedEmployee.getEmail());
         Employee updatedEmployeeObj = employeeRepository.save(employee);
-        return EmployeeMapper.mapToEmployeeDto(updatedEmployeeObj);
+        return EmployeeMapper.INSTANCE.toEmployeeDto(updatedEmployeeObj);
     }
 
     @Override
