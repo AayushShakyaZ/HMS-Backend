@@ -1,6 +1,6 @@
 package com.backend.emsbackend.controller;
 
-import com.backend.emsbackend.dto.EmployeeDto;
+import com.backend.emsbackend.model.dto.EmployeeDto;
 import com.backend.emsbackend.service.EmployeeService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -30,7 +30,7 @@ public class EmployeeController {
         return ResponseEntity.ok(employeeDto);
     }
 
-    @GetMapping()
+    @GetMapping("/list")
     public ResponseEntity<List<EmployeeDto>> getAllEmployees() {
         List<EmployeeDto> employees = employeeService.getAllEmployees();
         return ResponseEntity.ok(employees);

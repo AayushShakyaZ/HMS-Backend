@@ -49,6 +49,11 @@
             <version>1.6.2</version>
         </dependency>
 
+        <dependency>
+            <artifactId>spring-boot-starter-security</artifactId>
+            <groupId>org.springframework.boot</groupId>
+        </dependency>
+
     </dependencies>
 
     <build>

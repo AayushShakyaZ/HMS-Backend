@@ -1,7 +1,7 @@
 package com.backend.emsbackend.service.serviceimpl;
 
-import com.backend.emsbackend.dto.EmployeeDto;
-import com.backend.emsbackend.entity.Employee;
+import com.backend.emsbackend.model.dto.EmployeeDto;
+import com.backend.emsbackend.model.entity.Employee;
 import com.backend.emsbackend.exceptions.ResourseNotFoundException;
 import com.backend.emsbackend.mapper.EmployeeMapper;
 import com.backend.emsbackend.repository.EmployeeRepository;

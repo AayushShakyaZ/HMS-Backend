@@ -1,7 +1,7 @@
 package com.backend.emsbackend.mapper;
 
-import com.backend.emsbackend.dto.EmployeeDto;
-import com.backend.emsbackend.entity.Employee;
+import com.backend.emsbackend.model.dto.EmployeeDto;
+import com.backend.emsbackend.model.entity.Employee;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 

@@ -1,6 +1,6 @@
 package com.backend.emsbackend.service;
 
-import com.backend.emsbackend.dto.EmployeeDto;
+import com.backend.emsbackend.model.dto.EmployeeDto;
 
 import java.util.List;
 

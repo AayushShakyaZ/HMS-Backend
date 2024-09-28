@@ -1,4 +1,4 @@
-package com.backend.emsbackend.dto;
+package com.backend.emsbackend.model.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
