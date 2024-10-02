@@ -1,52 +1,58 @@
 package com.backend.emsbackend.security;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor
 public class SecurityConfig {
+
+    private final JwtEntryPoint jwtEntryPoint;
+    private final CustomUserDetailService customUserDetailService;;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
+                .csrf(AbstractHttpConfigurer::disable)  //CSRF in Spring Security 6+
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(HttpMethod.GET, "/**").permitAll()     // Permit all GET requests
-                        .requestMatchers(HttpMethod.POST, "/**").permitAll()    // Permit all POST requests
-                        .requestMatchers(HttpMethod.DELETE, "/**").permitAll()  // Permit all DELETE requests
-                        .anyRequest().authenticated()  // Authenticate all requests
+                        .requestMatchers("/api/auth/**").permitAll()  // Allow all requests to /api/auth/**
+                        .anyRequest().authenticated()
                 )
-                .httpBasic(withDefaults()); // Use HTTP Basic Authentication
+                .httpBasic(withDefaults());  // Enable HTTP Basic Authentication
 
+        http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
 
     @Bean
-    public UserDetailsService users() {
-        UserDetails admin = User.builder()
-                .username("Aayush")
-                .password("password")
-                .roles("ADMIN")
-                .build();
+    public AuthenticationManager authenticationManager(
+            AuthenticationConfiguration authenticationConfiguration) throws Exception {
 
-        UserDetails employee = User.builder()
-                .username("Employee")
-                .password("password")
-                .roles("USER")
-                .build();
+        return authenticationConfiguration.getAuthenticationManager();
 
-        return new InMemoryUserDetailsManager(admin, employee);
+    }
 
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public JwtAuthenticationFilter jwtAuthenticationFilter(){
+        return new JwtAuthenticationFilter();
     }
 
 }
